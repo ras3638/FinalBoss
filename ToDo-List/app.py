@@ -5,6 +5,7 @@ from forms import LoginForm, SignupForm
 import MySQLdb
 
 
+
 app = Flask(__name__)
 app.config.from_object('config')
 db = MySQLdb.connect(host="mysql.server", # your host, usually localhost
@@ -84,12 +85,25 @@ def NewUser():
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-
     form = LoginForm()
 
     if form.validate_on_submit():
-        flash('Login requested for UserName="' + form.UserName.data + '" Password="' + form.Password.data + '", remember_me=' + str(form.remember_me.data))
-        return redirect('/index')
+        #this executes if button is clicked (both Username and password are required)
+
+        cur = db.cursor()
+        # Use all the SQL you like
+        cur.execute('SELECT * from tblUsers where UserName ="' + form.UserName.data + '" and Password ="' + form.Password.data + '";')
+
+        # print all the first cell of all the rows
+        for row in cur.fetchall() :
+            print "Returned rows in tblUsers:"
+            print row
+            if row:
+                #Authentication Successful
+                flash('Login requested for UserName="' + form.UserName.data + '" Password="' + form.Password.data + '", remember_me=' + str(form.remember_me.data))
+                return redirect('/index')
+        #Authentication Fail
+        return redirect('/login')
 
     return render_template('login.html',
         title = 'Sign In',

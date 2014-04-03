@@ -39,5 +39,14 @@ function set_openid(openid, pr)
     </p>
     <p>{{form.remember_me}} Remember Me</p>
     <p><input type="submit" name="btnSubmit" value="Sign In" ></p>
+
+
+        <p>
+
+        New Error
+        {% for error in form.errors.Password %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+    </p>
 </form>
 {% endblock %}
