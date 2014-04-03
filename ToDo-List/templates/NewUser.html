@@ -1,0 +1,30 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Welcome New User</h1>
+<form action="" method="post" name="NewUser">
+    {{form.hidden_tag()}}
+    <p>
+        Please enter your UserName<br>
+        {{form.SignupUserName(size=80)}}
+        {% for error in form.errors.SignupUserName %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+        <!--
+        |{% for pr in providers %}
+        <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}');">{{pr.name}}</a> |
+        {% endfor %}-->
+    </p>
+
+    <p>
+        Please enter your Password<br>
+        {{form.SignupPassword(size=80)}}
+        {% for error in form.errors.SignupPassword %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+    </p>
+    <p><input type="submit" value="Sign Up"></p>
+</form>
+{% endblock %}

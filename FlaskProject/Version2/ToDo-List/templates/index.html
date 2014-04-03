@@ -1,0 +1,16 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Hi, {{user.nickname}}!</h1>
+
+
+{% for tasks in tasks %}
+<p>
+  <h2>{{tasks.title}}</h2>
+  {{tasks.description}}
+  <hr>
+</p>
+{% endfor %}
+
+{% endblock %}

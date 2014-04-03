@@ -1,0 +1,100 @@
+#!bin/python
+from flask import Flask
+from flask import render_template, flash, redirect
+from forms import LoginForm
+
+import MySQLdb
+
+app = Flask(__name__)
+
+app.config.from_object('config')
+
+
+db = MySQLdb.connect(host="mysql.server", # your host, usually localhost
+                     user="FInalBoss", # your username
+                      passwd="final1", # your password
+                      db="FInalBoss$default") # name of the data base
+
+# you must create a Cursor object. It will let
+#  you execute all the queries you need
+cur = db.cursor()
+
+# Use all the SQL you like
+cur.execute("SELECT * from tblToDo")
+
+# print all the first cell of all the rows
+for row in cur.fetchall() :
+    print "Rows in tblToDo:"
+    print row
+
+
+@app.route('/index',  methods = ['GET', 'POST'])
+def index():
+    user = { 'nickname': 'User' }
+
+    tasks = [
+    {
+        'id': 1,
+        'title': u'Buy groceries',
+        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
+        'done': False
+    },
+    {
+        'id': 2,
+        'title': u'Learn Python',
+        'description': u'Need to find a good Python tutorial on the web',
+        'done': False
+    },
+          {
+      'id': 3,
+      'title': u'Finish Project',
+      'description': u'Need to find finish project for Networking classs',
+      'done': False
+   },
+   {
+      'id': 4,
+      'title': u'Finish Project',
+      'description': u'Need to find finish project for Networking classs',
+      'done': False
+   }
+]
+
+
+    return render_template('index.html',
+        title = 'ToDo List',
+        user = user,
+        tasks = tasks)
+
+
+if __name__ == '__main__':
+   app.run(debug = True)
+
+
+
+
+@app.route('/NewUser', methods = ['GET', 'POST'])
+def NewUser():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Signup Username="' + form.openid.data + '", Signup Password=')
+        return redirect('/login')
+    return render_template('NewUser.html',
+        title = 'Sign Up',
+        form = form,
+        providers = app.config['OPENID_PROVIDERS'])
+
+@app.route('/', methods = ['GET', 'POST'])
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    print "Testing*********!"
+    form = LoginForm()
+    #if request.form['btnSubmit'] == 'Sign In':
+     #  return redirect('/index')
+
+    #if form.validate_on_submit():
+        #flash('Login requested for OpenID="' + form.openid.data + '", remember_me=' + str(form.remember_me.data))
+
+    return render_template('login.html',
+        title = 'Sign In',
+        form = form,
+        providers = app.config['OPENID_PROVIDERS'])
