@@ -2,29 +2,45 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="position:relative; height:250px; width:325px; margin-left:auto; margin-right:auto; top: 125px; background-color: silver; border-radius:25px;">
+    <div style="float:center; padding-top:3%; padding-right:auto; padding-left:auto;">
+    <body>
+    <center><h1>Welcome New User</h1>
+    <form action="" method="post" name="NewUser">
+        {{form.hidden_tag()}}
+        <p>
+            Please enter your Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            {{form.SignupUserName(size=40)}}
+            {% for error in form.errors.SignupUserName %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+            <!--
+            |{% for pr in providers %}
+            <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}');">{{pr.name}}</a> |
+            {% endfor %}-->
+        </p>
 
-<h1>Welcome New User</h1>
-<form action="" method="post" name="NewUser">
-    {{form.hidden_tag()}}
-    <p>
-        Please enter your UserName<br>
-        {{form.SignupUserName(size=80)}}
-        {% for error in form.errors.SignupUserName %}
-        <span style="color: red;">[{{error}}]</span>
-        {% endfor %}<br>
-        <!--
-        |{% for pr in providers %}
-        <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}');">{{pr.name}}</a> |
-        {% endfor %}-->
-    </p>
+        <p>
+            Please enter your Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            {{form.SignupPassword(size=40)}}
+            {% for error in form.errors.SignupPassword %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p><input type="submit" value="Sign Up">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
-    <p>
-        Please enter your Password<br>
-        {{form.SignupPassword(size=80)}}
-        {% for error in form.errors.SignupPassword %}
-        <span style="color: red;">[{{error}}]</span>
-        {% endfor %}<br>
-    </p>
-    <p><input type="submit" value="Sign Up"></p>
-</form>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+        {% for message in messages %}
+
+            <font size="4" color="red">{{ message }} </font>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </form></center>
+    </body>
+    </div>
+</div>
 {% endblock %}

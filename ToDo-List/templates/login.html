@@ -2,51 +2,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<script type="text/javascript">
-function set_openid(openid, pr)
-{
-    u = openid.search('<username>');
-    if (u != -1) {
-        // openid requires username
-        user = prompt('Enter your ' + pr + ' username:');
-        openid = openid.substr(0, u) + user;
-    }
-    form = document.forms['login'];
-    form.elements['openid'].value = openid;
-}
-</script>
-<h1>Please, Sign In!!!</h1>
-<form action="" method="post" name="login">
-    {{form.hidden_tag()}}
-    <p>
-        Please enter your UserName<br>
-        {{form.UserName(size=80)}}
-        {% for error in form.errors.UserName %}
-        <span style="color: red;">[{{error}}]</span>
-        {% endfor %}<br>
-        <!--
-        |{% for pr in providers %}
-        <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}');">{{pr.name}}</a> |
-        {% endfor %}-->
-    </p>
+<div style="position:relative; height:250px; width:325px; margin-left:auto; margin-right:auto; top: 125px; background-color: silver; border-radius:25px;">
+    <div style="float:center; padding-top:3%; padding-right:auto; padding-left:auto;">
+    <body>
+        <h1><center>Please, Sign In!!!</center></h1>
+        <form action="" method="post" name="login">
+            {{form.hidden_tag()}}
 
-    <p>
-        Please enter your Password<br>
-        {{form.Password(size=80)}}
-        {% for error in form.errors.Password %}
-        <span style="color: red;">[{{error}}]</span>
-        {% endfor %}<br>
-    </p>
-    <p>{{form.remember_me}} Remember Me</p>
-    <p><input type="submit" name="btnSubmit" value="Sign In" ></p>
+            <center><p>
+                Please enter your Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                {{form.UserName(size=40)}}
+                {% for error in form.errors.UserName %}
+                <span style="color: red;">[{{error}}]</span>
+                {% endfor %}<br>
+                <!--
+                |{% for pr in providers %}
+                <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}');">{{pr.name}}</a> |
+                {% endfor %}-->
+            </p>
+
+            <p>
+                Please enter your Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                {{form.Password(size=40)}}
+                {% for error in form.errors.Password %}
+                <span style="color: red;">[{{error}}]</span>
+                {% endfor %}<br>
+            </p>
+            <p>{{form.remember_me}} Remember Me&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="btnSubmit" value="Sign In" ></p>
 
 
-        <p>
 
-        New Error
-        {% for error in form.errors.Password %}
-        <span style="color: red;">[{{error}}]</span>
-        {% endfor %}<br>
-    </p>
-</form>
+
+        </form>
+        </center>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+        {% for message in messages %}
+
+            <font size="4" color="red">{{ message }} </font>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+    </body>
+    </div>
+</div>
 {% endblock %}
