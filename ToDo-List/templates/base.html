@@ -9,25 +9,28 @@
   </head>
   <body style="background-color: grey; color: navy;">
     <div style="position: fixed; z-index: 1; text-align:right;top:0; height: 20px; width: 100%; background-color:grey;">
-    <a href="/index">ToDo List</a>: <a href="/login" style="color: white;">Sign Out</a> | <a href="/NewUser" style="color: white;">New User</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    ToDo List: <a href="/login" style="color: white;">Sign Out</a> | <a href="/NewUser" style="color: white;">New User</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
     <div style="position: fixed ;z-index: 1 ;font-size:50 ;height: auto ;border-bottom:1px solid ;top: 20px ; width: 100%;background-color: grey;"><strong>Final</strong><span style="color:red">Boss</span>
     </div>
-    <!--
+    <!---
     <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>
     {% for message in messages %}
 
-        <font size="4" color="red">{{ message }} </font>
+        <font size="8" color="red">{{ message }} </font>
     {% endfor %}
     </ul>
     {% endif %}
     {% endwith %}
-    -->
+    --->
 
     {% block content %}{% endblock %}
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
   <p>&nbsp;</p>
   <p>&nbsp;</p>
   </body>

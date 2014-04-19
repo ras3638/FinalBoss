@@ -3,7 +3,7 @@
 
 {% block content %}
 <div style="position:fixed ; left: 7%;top: 100px;background-color: ;">
-    <h1>Hi, {{user.nickname}}!</h1>
+    <h1>Hi, {{user}}!</h1>
 </div>
 <div style="position:relative; height: auto; width:500px; margin-left:auto; margin-right:auto; top: 125px; background-color: silver; border-radius:10px;">
     <div style="float:center; padding-top:3%;padding-bottom:3%; padding-right:10%; padding-left:10%;">
@@ -11,9 +11,14 @@
     <ol>
     {% for tasks in tasks %}
     <li><p>
-        <h2>{{tasks.title}}<input type="submit" name="btnEdit" value="Edit" style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="btnDel" value="X" style="float: right;">
+        <h2>{{tasks.title}}<input type="submit" name="btnEdit" value="Edit" style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="btnDel" value="Delete" style="float: right;">
+        {{tasks.date}}
+
         </h2>
+
         {{tasks.description}}
+
+
     </p></li>
     {% endfor %}
     </ol>

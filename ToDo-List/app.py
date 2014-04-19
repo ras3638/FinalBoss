@@ -3,6 +3,7 @@ from flask import Flask
 from flask import render_template, flash, redirect, request
 from forms import LoginForm, SignupForm, CreateEntryForm
 import MySQLdb
+import time
 
 #***************Configuration Code. Do Not Modify***************
 
@@ -12,57 +13,95 @@ app.config.from_object('config')
 if __name__ == '__main__':
    app.run(debug = True)
 
-
-##################################################
+GlobalUserName = None
 
 
 @app.route('/index',  methods = ['GET', 'POST', 'DELETE'])
 def index():
 
-    user = { 'nickname': 'User' }
-
-    tasks = [
-    {
-        'id': 1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-        'done': False
-    },
-    {
-        'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web',
-        'done': False
-    },
-          {
-      'id': 3,
-      'title': u'Finish Project',
-      'description': u'Need to find finish project for Networking classs',
-      'done': False
-   },
-   {
-      'id': 4,
-      'title': u'Finish Project',
-      'description': u'Need to find finish project for Networking classs',
-      'done': False}]
-
-
-    #Need to find code that triggers an event from the Create button######
-
-    #if request.method == 'POST':
-
-
     form = CreateEntryForm()
+    global GlobalUserName
+    tasks = []
+    x = 1
+
+    if GlobalUserName == None:
+        flash("There was a minor connection issue. Please try to login again")
+        return redirect('/login')
+
+    #this try/catch populates Index
+    try:
+        db = MySQLdb.connect(host="mysql.server", user="FInalBoss", passwd="final1", db="FInalBoss$default")
+        cur = db.cursor()
+        print GlobalUserName
+        cur.execute('SELECT * from tblToDo where Username ="' + GlobalUserName + '";')
+
+        for row in cur.fetchall():
+            print "Returned rows in tblToDo:"
+            print row
+            print row[0]
+            entry = {'DatabaseID': row[0], 'id': x, 'title': row[2], 'description': row[3], 'date': row[4]}
+            tasks.append(entry)
+            print "task list is at:" + str(tasks)
+            x+=1
+    except (AttributeError, MySQLdb.OperationalError):
+        print "Database Exception Error has occurred (populating Index)"
+        flash("Database error")
+        return redirect('/login')
+    finally:
+        print "Database connection has closed via Finally (populating Index)"
+        db.close()
+
     if request.method == 'POST':
         if request.form['btnCreate'] == 'Create':
             title = form.title.data
             entry = form.entry.data
-            flash('Create Entry requested for Title= "' + title + 'Entry = "' + entry)
+
+            #this try/catch Inserts a new Entry
+            try:
+                db = MySQLdb.connect(host="mysql.server", user="FInalBoss", passwd="final1", db="FInalBoss$default")
+                cur = db.cursor()
+                cur.execute('Insert Into tblToDo (Username,Title,Entry,Date) Values("' + GlobalUserName + '","' + title +'","' + entry + '","' + time.strftime("%Y/%m/%d") + '");')
+                db.commit()
+                print "A new entry has been inserted into database"
+
+            except (AttributeError, MySQLdb.OperationalError):
+                print "Database Exception Error has occurred (Inserting New Entry)"
+                flash("Database error")
+                return redirect('/index')
+            finally:
+                print "Database connection has closed via Finally (Inserting New Entry)"
+                db.close()
+
+        return redirect('/index')
+
+        if request.form['btnDel'] == 'Delete':
+
+           print "BTN Delete has been pressed"
+
+           # NEED TO FIND CODE THAT TRIGGERS DELETE BUTTON
+
+           '''
+            #this try/catch Deletes a new Entry
+            try:
+                db = MySQLdb.connect(host="mysql.server", user="FInalBoss", passwd="final1", db="FInalBoss$default")
+                cur = db.cursor()
+                cur.execute('Delete from tblToDo where ID = ("' + DatabaseID + '");')
+                db.commit()
+                print "An entry has been deleted from database"
+
+            except (AttributeError, MySQLdb.OperationalError):
+                print "Database Exception Error has occurred (Deleting Entry)"
+                flash("Database error")
+                return redirect('/index')
+            finally:
+                print "Database connection has closed via Finally (Deleting Entry)"
+                db.close()
+            '''
         return redirect('/index')
 
     return render_template('index.html',
         title = 'ToDo List',
-        user = user,
+        user = GlobalUserName,
         tasks = tasks)
 
 
@@ -95,8 +134,9 @@ def NewUser():
                     flash('Username is already in database. Please choose another.')
                     return redirect('/NewUser')
         except (AttributeError, MySQLdb.OperationalError):
-            print "Database connection has closed via Exception (Validating username)"
-            db.close()
+            print "Database Exception Error has occurred (Validating username)"
+            flash("Database error")
+            return redirect('/NewUser')
         finally:
             print "Database connection has closed via Finally (Validating username)"
             db.close()
@@ -114,8 +154,9 @@ def NewUser():
             cur.execute('Insert Into tblUsers Values("' + form.SignupUserName.data + '","' + form.SignupPassword.data + '");')
             db.commit()
         except (AttributeError, MySQLdb.OperationalError):
-            print "Database connection has closed via Exception (Insertion query)"
-            db.close()
+            print "Database Exception Error has occurred (Insertion query)"
+            flash("Database error")
+            return redirect('/NewUser')
         finally:
             print "Database connection has closed via Finally (Insertion query)"
             db.close()
@@ -132,10 +173,12 @@ def NewUser():
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     form = LoginForm()
+    global GlobalUserName
+    GlobalUserName = None;
 
     if form.validate_on_submit():
         #this executes if button is clicked (both Username and password are required)
-
+        GlobalUserName = form.UserName.data
         #this try/catch authenticates users with password when logging in
         try:
             db = MySQLdb.connect(host="mysql.server", user="FInalBoss", passwd="final1", db="FInalBoss$default")
@@ -144,19 +187,21 @@ def login():
             for row in cur.fetchall() :
                 if row:
                     #Authentication Successful
-                    flash('Login requested for UserName="' + form.UserName.data + '" Password="' + form.Password.data + '", remember_me=' + str(form.remember_me.data))
+
                     print "User has succesfully logged in"
+                    print "GlobalUserName has been set to : " + form.UserName.data
                     return redirect('/index')
 
         except (AttributeError, MySQLdb.OperationalError):
-            print "Database connection has closed via Exception (Login)"
-            db.close()
+            print "Database Exception Error has occurred"
+            flash("Database error")
+            return redirect('/login')
         finally:
             print "Connection closed via Finally (Login)"
             db.close()
 
         #Authentication Fail
-        flash('Login failed')
+        flash('Incorrect username or password')
         return redirect('/login')
 
     return render_template('login.html',
