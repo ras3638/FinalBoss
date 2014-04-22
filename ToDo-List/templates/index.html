@@ -10,24 +10,57 @@
     <body>
     <ol>
     {% for tasks in tasks %}
-    <li><p>
-        <h2>{{tasks.title}}<input type="submit" name="btnEdit" value="Edit" style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="btnDel" value="Delete" style="float: right;">
-        {{tasks.date}}
+    <li><h2>{{tasks.DBid}}</h2>
+        <div style="width:100%;">{{tasks.title}}<div style="float:right;">{{tasks.date}}</div>
+        <!--
+        <input type="submit" name="btnEdit" value="Edit" style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" name="btnDel2" value="Delete2" style="float: right;">
+        -->
+        <h4 style="text-align:left;">{{tasks.description}}</h4>
 
-        </h2>
-
-        {{tasks.description}}
-
-
-    </p></li>
+    </li>
     {% endfor %}
     </ol>
     <hr>
+
     <form action="" method='post' name='NewEntry'>
-        <input type="text" width=20px name="title" placeholder="Enter a title"><br>
-        <input type="text" size="40" name="entry" placeholder="Enter details about task"><br>
+        {{form_cr.hidden_tag()}}
+        {{form_cr.title(placeholder = "Title", size=40)}}
+                {% for error in form_cr.errors.title %}
+                <span style="color: red;">[{{error}}]</span>
+                {% endfor %}<br>
+
+        {{form_cr.entry(placeholder = "Description", size=40)}}
+                {% for error in form_cr.errors.entry %}
+                <span style="color: red;">[{{error}}]</span>
+                {% endfor %}<br>
+
+
         <input type="submit" name = "btnCreate" value="Create">
+
     </form>
+
+    <form action="" method='post' name='DeleteEntry'>
+        {{form_del.hidden_tag()}}
+        {{form_del.delete(placeholder = "ID Number", size=40)}}
+                {% for error in form_del.errors.delete %}
+                <span style="color: red;">[{{error}}]</span>
+                {% endfor %}<br>
+        <input type="submit" name = "btnDelete" value="Delete">
+    </form>
+
+
     </div>
+
+            {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+        {% for message in messages %}
+
+            <font size="4" color="red">{{ message }} </font>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
 </div>
 {% endblock %}

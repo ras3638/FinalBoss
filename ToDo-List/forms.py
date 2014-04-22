@@ -25,5 +25,7 @@ class CreateEntryForm(Form):
     title = TextField('title', validators = [Required()])
     entry = TextField('entry', validators = [Required()])
 
+class DeleteEntryForm(Form):
 
-
+    #This class is to delete an entry in ToDo List
+    delete = TextField('delete', validators = [Required()])
