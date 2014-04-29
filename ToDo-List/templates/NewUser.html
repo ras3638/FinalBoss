@@ -2,7 +2,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="position:relative; height:250px; width:325px; margin-left:auto; margin-right:auto; top: 125px; background-color: silver; border-radius:25px;">
+
+<div style="position:relative; height:280px; width:325px; margin-left:auto; margin-right:auto; top: 125px; background-color: silver; border-radius:25px;">
     <div style="float:center; padding-top:3%; padding-right:auto; padding-left:auto;">
     <body>
     <center><h1>Welcome New User</h1>
@@ -21,7 +22,8 @@
         </p>
 
         <p>
-            Please enter your Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            Please enter your Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <br>
             {{form.SignupPassword(size=40)}}
             {% for error in form.errors.SignupPassword %}
             <span style="color: red;">[{{error}}]</span>

@@ -11,12 +11,12 @@
     <ol>
     {% for tasks in tasks %}
     <li><h2>{{tasks.DBid}}</h2>
-        <div style="width:100%;">{{tasks.title}}<div style="float:right;">{{tasks.date}}</div>
+        <div style="width:100%;font-size:20 ;"><strong>{{tasks.title}}</strong><div style="float:right;">{{tasks.date}}</div></div>
         <!--
         <input type="submit" name="btnEdit" value="Edit" style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="submit" name="btnDel2" value="Delete2" style="float: right;">
         -->
-        <h4 style="text-align:left;">{{tasks.description}}</h4>
+        <h5 style="text-align:left;">{{tasks.description}}</h5>
 
     </li>
     {% endfor %}
@@ -39,7 +39,7 @@
         <input type="submit" name = "btnCreate" value="Create">
 
     </form>
-
+    <hr>
     <form action="" method='post' name='DeleteEntry'>
         {{form_del.hidden_tag()}}
         {{form_del.delete(placeholder = "ID Number", size=40)}}

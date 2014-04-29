@@ -39,18 +39,10 @@ def index():
         cur.execute('SELECT * from tblToDo where Username ="' + session['username'] + '";')
 
         for row in cur.fetchall():
-            print "Returned rows in tblToDo:"
-            #print row
-            #print row[0]
-            #entry = {'DatabaseID': row[0], 'id': x, 'title': row[2], 'description': row[3], 'date': row[4]}
             entry = {'HTMLid': x, 'Dbid': row[0], 'title': row[2], 'description': row[3], 'date': row[4]}
             tasks.append(entry)
-
-            #print "task list is at:" + str(tasks)
             x+=1
-        #for i in tasks:
-            #print "HTML/DB Subset_Dictionary"
-            #print {y: i[y] for y in ('HTMLid', 'Dbid')}
+
     except (AttributeError, MySQLdb.OperationalError):
         print "Database Exception Error has occurred (populating Index)"
         flash("Database error")
@@ -63,14 +55,15 @@ def index():
 
 
     if form_del.validate_on_submit():
-        #this try/catch Deletes a new Entry
+
         HTMLid = form_del.delete.data
         counter = 0
-        for i in tasks:
 
+        for i in tasks:
             if int(HTMLid) == i['HTMLid']:
-                counter =1
+                counter = 1
                 break;
+
         if counter == 0:
             flash("ID NOT FOUND")
             redirect('/index')
@@ -79,14 +72,13 @@ def index():
              if int(HTMLid) == i['HTMLid']:
                  IDSWAP = i['Dbid']
                  print "FOUND A MATCH"
-                 print IDSWAP
                  break
 
-
+        #this try/catch Deletes a new Entry
         try:
             db = MySQLdb.connect(host="mysql.server", user="FInalBoss", passwd="final1", db="FInalBoss$default")
             cur = db.cursor()
-            print "DELETE STATEMENT"
+
             print type(IDSWAP)
             u = str(IDSWAP)
             print type(u)
@@ -131,9 +123,6 @@ def index():
             print "Database connection has closed via Finally (Inserting New Entry)"
             db.close()
             return redirect('/index')
-
-
-
 
 
     return render_template('index.html',
